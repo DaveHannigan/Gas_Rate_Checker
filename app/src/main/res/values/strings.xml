@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Gas Rate Checker</string>
+    <string name="start_button_text">Start timer</string>
+    <string name="stop_button_text">Stop timer</string>
+</resources>
