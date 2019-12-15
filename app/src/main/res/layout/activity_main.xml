@@ -24,7 +24,8 @@
         android:layout_marginBottom="25dp"
         android:layout_marginLeft="25dp"
         android:text="@string/start_button_text"
-        android:layout_marginStart="25dp" />
+        android:layout_marginStart="25dp"
+        android:onClick="startTimer"/>
     <Button
         android:id="@+id/stop_button"
         android:layout_width="wrap_content"
@@ -34,6 +35,39 @@
         android:layout_marginBottom="25dp"
         android:layout_marginRight="25dp"
         android:text="@string/stop_button_text"
-        android:layout_marginEnd="25dp" />
+        android:layout_marginEnd="25dp"
+        android:onClick="stopTimer"/>
+
+    <TextView
+        android:id="@+id/timer_display"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/start_button"
+        app:layout_constraintEnd_toStartOf="@id/stop_button"
+        android:layout_marginBottom="25dp"
+        android:text="Timer"/>
+
+    <TextView
+        android:id="@+id/normal_meter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="Gas rate for 0.01 movement of gas meter"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginLeft="25dp"/>
+    <TextView
+        android:id="@+id/normal_meter_gas_rate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/normal_meter"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginRight="25dp"
+        android:text="0  "/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
