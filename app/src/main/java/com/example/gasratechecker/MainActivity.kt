@@ -5,8 +5,9 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_main.*
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.sql.Time
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,26 +15,31 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }
-    var timerStart = 0L
-    var timerStop = 0L
 
-    fun startTimer(view: View){
-        timerStart = SystemClock.elapsedRealtime()
-        val timerDuration = findViewById<TextView>(R.id.timer_display)
-        timerDuration.text = "0"
+    var startTime = 0L
+    var stopTime = 0L
 
+    fun start(view: View) {
+        startTime = timer()
+        val time = findViewById<TextView>(R.id.hello)
+        time.text = "0"
+    }
+    fun stop(view: View){
+        stopTime = timer()
+        var elapsedTime: Double  = (stopTime-startTime)/1000.toDouble()
+        val time = findViewById<TextView>(R.id.hello)
+        val normMeter = findViewById<TextView>(R.id.normal_meter_gas_rate)
+        time.text = elapsedTime.toString()
+        var gasUsageM2 = BigDecimal(0.01/elapsedTime*3600).setScale(2,RoundingMode.HALF_EVEN)
+        var gasUsageKw =  BigDecimal(10.77*gasUsageM2).setScale(2, RoundingMode.HALF_EVEN)
+        normMeter.text = gasUsageM2.toString()
     }
 
-    fun stopTimer(view: View){
-        timerStop = SystemClock.elapsedRealtime()
-        val duration: Float = (timerStop - timerStart)/1000F
-
-        val timerDuration = findViewById<TextView>(R.id.timer_display)
-        timerDuration.text = duration.toString()
-
-        val gasRateDisplayNormal = findViewById<TextView>(R.id.normal_meter_gas_rate)
-        val cubicMetersPerHour = 0.01/duration*3600
-        gasRateDisplayNormal.text = cubicMetersPerHour.toString()
-
-    }
 }
+
+fun timer() :Long{
+    return SystemClock.elapsedRealtime()
+}
+
+
+
