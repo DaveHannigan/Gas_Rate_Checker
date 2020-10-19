@@ -7,8 +7,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
+
 import androidx.core.widget.doOnTextChanged
 import com.example.gasratechecker.databinding.ActivityMainBinding
+
+
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.sql.Time
@@ -17,6 +20,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -72,6 +76,11 @@ class MainActivity : AppCompatActivity() {
 fun timer() :Double{
     return SystemClock.elapsedRealtime().toDouble()
 }
+
+
+
+
+
 
 
 
