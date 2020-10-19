@@ -3,8 +3,15 @@ package com.example.gasratechecker
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.SystemClock
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
+
+import androidx.core.widget.doOnTextChanged
+import com.example.gasratechecker.databinding.ActivityMainBinding
+
+
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.sql.Time
@@ -13,33 +20,67 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-    }
 
-    var startTime = 0L
-    var stopTime = 0L
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    fun start(view: View) {
-        startTime = timer()
-        //val time = findViewById<TextView>(R.id.hello)
-        //time.text = "0"
-    }
-    fun stop(view: View){
-        stopTime = timer()
-        var elapsedTime: Double  = (stopTime-startTime)/1000.toDouble()
-       // val time = findViewById<TextView>(R.id.hello)
-        val normMeter = findViewById<TextView>(R.id.normal_meter_gas_rate)
-        //time.text = elapsedTime.toString()
-        var gasUsageM2 = BigDecimal(0.01/elapsedTime*3600).setScale(2,RoundingMode.HALF_EVEN)
-        //var gasUsageKw =  BigDecimal(10.77*gasUsageM2).setScale(2, RoundingMode.HALF_EVEN)
-        normMeter.text = gasUsageM2.toString()
-    }
+        var startTime :Double = 0.0
+        var stopTime :Double = 0.0
 
+        binding.buttonReset.setOnClickListener {
+            binding.timerDisplay.text = "0"
+            binding.editStartReading.setText("0.0")
+            binding.editStopReading.setText("0.0")
+            binding.normalMeterCubicMetres.text = "0"
+            binding.normalMeterGasRate.text = "0"
+            binding.impMeterGasRate.text = "0"
+            binding.impMeterCubicFeet.text = "0"
+            binding.impMeterHalfRevGasRate.text = "0"
+            binding.impMeterHalfRevCubicFeet.text ="0"
+
+        }
+
+        binding.startButton.setOnClickListener{
+            binding.timerDisplay.text = "Timer running"
+            startTime = timer()
+        }
+        binding.stopButton.setOnClickListener {
+            stopTime = timer()
+            val elapsedTime = (stopTime-startTime)/1000
+            binding.timerDisplay.text = elapsedTime.toString()
+            binding.normalMeterCubicMetres.text = "%.2fM\u00B3/hr".format(3600/elapsedTime*0.01)
+            binding.normalMeterGasRate.text = "%.2fKw/hr".format((3600/elapsedTime*0.01)*10.77)
+            binding.impMeterCubicFeet.text = "%.2fft\u00B3/hr".format(3600/elapsedTime)
+            binding.impMeterGasRate.text = "%.2fKw/hr".format(3600/elapsedTime*0.0283168*10.77)
+            binding.impMeterHalfRevCubicFeet.text = "%.2fft\u00B3/hr".format(3600/elapsedTime/2)
+            binding.impMeterHalfRevGasRate.text = "%.2fKw/hr".format(3600/elapsedTime/2*0.0283168*10.77)
+        }
+        binding.editStopReading.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable){}
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                //TODO("Not yet implemented")
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val start = binding.editStartReading.text.toString().toDouble()
+                val stop = s.toString().toDouble()
+                val elapsedTime = (stopTime - startTime)/1000
+               binding.digitalMeterCubicMet.text = "%.2f M\u00B3/hr".format((stop - start)/elapsedTime*3600 )
+                binding.digitalMeterGasRate.text = "%.2fKw/hr".format((stop - start)/elapsedTime*3600*10.77)
+            }
+
+        })
+    }
 }
 
-fun timer() :Long{
-    return SystemClock.elapsedRealtime()
+fun timer() :Double{
+    return SystemClock.elapsedRealtime().toDouble()
 }
+
+
+
+
+
 
 
 
